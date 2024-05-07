@@ -3,9 +3,7 @@ import dataBase from '../config/database.js';
 
 const Twit = dataBase.define('twits', {
     title: Sequelize.STRING,
-    content: Sequelize.STRING,
-    banner: Sequelize.STRING,
-    video: Sequelize.STRING,
+    content: Sequelize.STRING
 }, {
     schema: 'public',
     timestamps: false,

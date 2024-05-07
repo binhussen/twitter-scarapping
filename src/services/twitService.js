@@ -13,5 +13,13 @@ class TwitService {
             throw error;
         }
     }
+
+    static async addTwit(newTwit) {
+        try {
+            return await Twit.create(newTwit);
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 export default TwitService;
