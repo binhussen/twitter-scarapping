@@ -10,9 +10,11 @@ const scrapService = {
 
         await page.goto('https://twitter.com/coindesk', { waitUntil: 'networkidle2' });
 
-        const contents = await page
-            .$$eval('article div[lang]', (tweets) => tweets
-                .map((tweet) => tweet.textContent));
+        let scroll = true;
+        while(scroll) {
+            const contents = await page
+                .$$eval('article div[lang]', (tweets) => tweets
+                    .map((tweet) => tweet.textContent));
 
             const registeredTwits = await TwitService.getTwits();
             const registeredContents = registeredTwits.rows.map(obj => obj.content);
@@ -32,13 +34,27 @@ const scrapService = {
                 });
             }
 
-        const videos = await page
-            .$$eval('article video', (tweets) => tweets
-                .map((tweet) => tweet.textContent));
-        if (videos.length > 0) {
-            videos.forEach(async (video) => {
-                EmailService.sendEmail();
-            });
+            const videos = await page
+                .$$eval('article video', (tweets) => tweets
+                    .map((tweet) => tweet.textContent));
+            if (videos.length > 0) {
+                videos.forEach(async (video) => {
+                    EmailService.sendEmail();
+                });
+            }
+
+            const images = await page
+                .$$eval('article img', (images) => images
+                    .map((image) => image.src));
+
+            if(images.length > 0){
+                images.forEach(async (image) => {
+                    DocumentService(image);
+                });
+            }
+
+            await page.evaluate(() => {window.scrollBy(0, window.innerHeight);});
+            await page.waitForNetworkIdle({idleTime: 100, timeout: 120000});
         }
         browser.close();
     }
