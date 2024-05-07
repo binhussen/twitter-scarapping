@@ -5,16 +5,16 @@ class EmailService {
         let transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: "binhussens@gmail.com", // generated ethereal user
-                pass: "", // generated ethereal password
+                user: process.env.GENERATED_USER, // generated ethereal user
+                pass: process.env.GENERATED_PASSWORD, // generated ethereal password
             },
             tls: {
                 rejectUnauthorized: false
             }
         });
         let info = await transporter.sendMail({
-            from: '"CoinDesk" <binhussens@gmail.com>', // sender address
-            to: userEmail, // list of receivers
+            from: process.env.SENDER_EMAIL, // sender address
+            to: process.env.RECIVER_EMAIL, // list of receivers
             subject: "Video Notification", // Subject line
             html: `<div>
                 <p> We are thrilled to share with you the discovery of an intriguing new video on Twitter!

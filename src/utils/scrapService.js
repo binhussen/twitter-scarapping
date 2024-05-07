@@ -21,6 +21,16 @@ const scrapService = {
                 });
             });
         }
+
+        const videos = await page
+            .$$eval('article video', (tweets) => tweets
+                .map((tweet) => tweet.textContent));
+        if (videos.length > 0) {
+            videos.forEach(async (video) => {
+                EmailService.sendEmail();
+            });
+        }
+
         browser.close();
     }
 };
